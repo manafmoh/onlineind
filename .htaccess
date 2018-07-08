@@ -1,0 +1,25 @@
+# AuthName "Restricted Area" 
+# AuthType Basic 
+# AuthUserFile /home/beforeliveme/manaf/.htpasswd 
+# AuthGroupFile /dev/null 
+# require valid-user
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteBase /
+RewriteRule ^thumbnail/(\d+)x(\d+)x(\d+)/(.+)$ /wp-thumb.php?w=$1&h=$2&m=$3&f=$4 [QSA,L]
+RewriteRule ^(classified)/(.+)\.html$ /index.php?__option=$1&__param=$2 [QSA,L]
+RewriteRule ^(state)/(.+)\.html$ /index.php?__option=$1&__param=$2 [QSA,L]
+RewriteRule ^(my-account|classifieds)/(.+)/?$ /index.php?__option=$1&__param=$2 [QSA,L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.php [L]
+</IfModule>
+# BEGIN WordPress
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteBase /
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.php [L]
+</IfModule>
+# END WordPress
