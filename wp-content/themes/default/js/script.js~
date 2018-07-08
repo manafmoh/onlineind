@@ -1,0 +1,56 @@
+function logout(){ 
+		$.get('/wp-handler.php?__class=Site&__proc=__userLogout',{ajax:  "1"},
+					function(data){
+						window.location = "/";
+						}
+						
+				);
+		}
+function setCookie(c_name,value,expiredays) {
+	var exdate=new Date();
+	exdate.setDate(exdate.getDate()+expiredays);
+	document.cookie=c_name+ "=" +escape(value)+
+	((expiredays==null) ? "" : ";expires="+exdate.toUTCString());
+}
+$(function(){
+	
+	var validator = $("#login_form").validate({ 
+		rules: {
+			email: {
+				required:true
+			},
+			password: {
+				required:true
+			}		
+		},
+		messages: {
+			email: {
+				required: "Please enter username"
+			},
+			password: {
+				required: "Please enter password"						
+			}
+		},
+		errorElement: "em",
+		success: function(label) {
+			label.hide();
+		},
+		submitHandler: function() {
+			var AJAX_URL = '/wp-handler.php?__ajax_request=1';
+			var serial = $('#login_form').serialize();
+			var url = AJAX_URL + '&__class=Site&__proc=__userLogin&' + serial;	
+			$.post(url, {
+				ajax:  "1"},
+					function(data){	redirect = $('#__redirect').val();
+						if(data == 'Invalid login, please try again') {
+							$('.message').html(data);
+							} else {
+								$('.loginbox').html(data);
+								window.location = redirect;
+								}
+						
+					 }
+			);
+		} 
+	});
+});
